@@ -2060,6 +2060,110 @@
     font-weight: 400;
   }
   .gc-card .formula {
+  /* ===== Live algorithm comparison panel ===== */
+  .cmp-intro {
+    color: var(--text-dim);
+    font-size: 12.5px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .cmp-empty {
+    color: var(--text-faint);
+    font-size: 12.5px;
+    padding: 16px;
+    text-align: center;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+  }
+  table.cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  table.cmp-table th, table.cmp-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--bg-elevated);
+  }
+  table.cmp-table th {
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--bg-elevated);
+  }
+  table.cmp-table td.cmp-algo  { color: var(--text); font-weight: 600; }
+  table.cmp-table td.cmp-val   { font-family: var(--font-mono); }
+  table.cmp-table td.cmp-yes   { color: var(--ok); font-weight: 700; }
+  table.cmp-table td.cmp-no    { color: var(--warn); font-weight: 700; }
+  table.cmp-table td.cmp-ok    { color: var(--ok); font-weight: 700; }
+  table.cmp-table td.cmp-bad   { color: var(--warn); font-weight: 700; }
+  .cmp-note {
+    margin-top: 10px;
+    color: var(--text-faint);
+    font-size: 11.5px;
+    line-height: 1.55;
+  }
+  .cmp-note.warn { color: var(--warn); }
+  /* ===== Algorithm verdict panel ===== */
+  .verdict-intro {
+    color: var(--text-dim);
+    font-size: 12.5px;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  table.verdict-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-bottom: 16px;
+  }
+  table.verdict-table th, table.verdict-table td {
+    padding: 9px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--bg-elevated);
+    vertical-align: top;
+  }
+  table.verdict-table th {
+    color: var(--text-dim);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--bg-elevated);
+  }
+  table.verdict-table td.v-algo    { color: var(--text); font-weight: 600; }
+  table.verdict-table td.v-time    { font-family: var(--font-mono); color: var(--text); }
+  table.verdict-table td.v-yes     { color: var(--ok);   font-weight: 700; }
+  table.verdict-table td.v-no      { color: var(--warn); font-weight: 700; }
+  table.verdict-table td.v-when    { color: var(--text-dim); }
+  .verdict-detail {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background: var(--bg-elevated);
+    border-radius: 4px;
+    border-left: 3px solid var(--text-faint);
+  }
+  .verdict-detail.brute  { border-left-color: var(--warn); }
+  .verdict-detail.dp     { border-left-color: var(--ok);   }
+  .verdict-detail.greedy { border-left-color: var(--info); }
+  .verdict-detail .v-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+  }
+  .verdict-detail.brute  .v-name { color: var(--warn); }
+  .verdict-detail.dp     .v-name { color: var(--ok);   }
+  .verdict-detail.greedy .v-name { color: var(--info); }
+  .verdict-detail .v-body {
+    color: var(--text);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
     font-family: var(--font-mono);
     font-size: 11px;
     color: var(--text-dim);
@@ -3205,6 +3309,75 @@
             </div>
           </div>
 
+        </div>
+      </div>
+      <!-- All Three Algorithms on Your Current Input — live comparison -->
+      <div class="panel">
+        <h3>All Three Algorithms on Your Current Input</h3>
+        <div class="cmp-intro">
+          The same instance, run through all three algorithms. <strong>DP is always optimal</strong>, so we use it as the reference. Brute-force matches DP (it's also exact). Greedy may disagree — when it does, you've found a counterexample.
+        </div>
+        <div id="cmp-table-wrap">
+          <div class="cmp-empty">Click <strong>Build</strong> or pick a preset to populate this comparison.</div>
+        </div>
+      </div>
+      <!-- Algorithm Verdict — when to use which? -->
+      <div class="panel">
+        <h3>Algorithm Verdict — When to Use Which?</h3>
+        <div class="verdict-intro">
+          The live results above tell you what each algorithm did on <em>this</em> input. The reference below tells you which algorithm to reach for in general.
+        </div>
+
+        <table class="verdict-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Time complexity</th>
+              <th>Always correct?</th>
+              <th>Best when…</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="v-algo">Brute-Force</td>
+              <td class="v-time">O(n · 2ⁿ)</td>
+              <td class="v-yes">YES (exact)</td>
+              <td class="v-when">n is very small (≤ 20)</td>
+            </tr>
+            <tr>
+              <td class="v-algo">Dynamic Programming</td>
+              <td class="v-time">O(n · W)</td>
+              <td class="v-yes">YES (exact)</td>
+              <td class="v-when">W is small relative to 2ⁿ</td>
+            </tr>
+            <tr>
+              <td class="v-algo">Greedy</td>
+              <td class="v-time">O(n log n)</td>
+              <td class="v-no">NO (counterexample)</td>
+              <td class="v-when">Speed matters and approximation is acceptable</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="verdict-detail brute">
+          <div class="v-name">Brute-Force</div>
+          <div class="v-body">
+            Tries every possible subset, so it always finds the right answer. The 2ⁿ growth rate makes it impractical for large inputs (at n = 30 you're already at a billion subsets), but for small problems it's the safest choice because there is nothing it can miss.
+          </div>
+        </div>
+
+        <div class="verdict-detail dp">
+          <div class="v-name">Dynamic Programming</div>
+          <div class="v-body">
+            Always finds the optimal answer by reusing solutions to smaller sub-problems. Runs in O(n · W), which is fast when W is small but explodes when W is large. The bound is "pseudo-polynomial" — polynomial in the numeric value of W, not in the bit-length of W — which is why DP doesn't contradict 0/1 Knapsack being NP-complete.
+          </div>
+        </div>
+
+        <div class="verdict-detail greedy">
+          <div class="v-name">Greedy (by value-to-weight ratio)</div>
+          <div class="v-body">
+            Sorts items by v/w and takes them greedily until full. Very fast, but <strong>not always correct</strong> — the "Greedy fails" preset shows a 3-item case where greedy gets only 73% of the optimal value. Plain greedy has no provable approximation ratio for 0/1 Knapsack at all; ratios can be arbitrarily bad. The standard fix — taking the better of greedy's answer and the single most valuable item that fits — gives a provable 1/2-approximation.
+          </div>
         </div>
       </div>
 
@@ -4406,6 +4579,78 @@ function computeOptimalValue(items, W) {
   }
   return dp[W];
 }
+
+/* ======================================================================
+   LIVE ALGORITHM COMPARISON PANEL
+   Runs all three algorithms on the current input and displays a
+   side-by-side summary. DP is the reference (always optimal); flags
+   greedy when it disagrees.
+====================================================================== */
+function updateComparisonPanel() {
+  const wrap = document.getElementById('cmp-table-wrap');
+  if (!wrap) return;
+
+  let parsed;
+  try {
+    parsed = parseInput();
+  } catch (err) {
+    wrap.innerHTML = `<div class="cmp-empty">Comparison unavailable: ${err.message}</div>`;
+    return;
+  }
+
+  const { items, W, V } = parsed;
+  const n = items.length;
+  const runBrute = (n <= 22);
+
+  // DP — the reference
+  const dpValue = computeOptimalValue(items, W);
+  const dpAnswerYes = dpValue >= V;
+  const dpOps = (n + 1) * (W + 1);
+
+  // Brute-force (skip if n > 22 to avoid freezing)
+  let bruteValue = null, bruteAnswerYes = null, bruteOps = null;
+  if (runBrute) {
+    const bfTrace = buildBruteForceTrace(items, W, V);
+    const bfDone = bfTrace[bfTrace.length - 1];
+    bruteValue = (bfDone.bestValue < 0) ? 0 : bfDone.bestValue;
+    bruteAnswerYes = !!bfDone.answerFound;
+    bruteOps = Math.pow(2, n);
+  }
+
+  // Greedy
+  const grTrace = buildGreedyTrace(items, W, V);
+  const grDone = grTrace[grTrace.length - 1];
+  const greedyValue = grDone.totalV;
+  const greedyAnswerYes = !!grDone.answerFound;
+  const greedyOps = n;
+
+  const yn = b => b ? `<td class="cmp-yes">YES</td>` : `<td class="cmp-no">NO</td>`;
+  const correctness = (val, isExact) => {
+    if (val === null) return `<td class="cmp-val">—</td>`;
+    if (isExact) return `<td class="cmp-ok">✓ exact</td>`;
+    return (val === dpValue)
+      ? `<td class="cmp-ok">✓ matches DP</td>`
+      : `<td class="cmp-bad">✗ off by ${dpValue - val}</td>`;
+  };
+
+  let rows = '';
+  rows += runBrute
+    ? `<tr><td class="cmp-algo">Brute-Force</td><td class="cmp-val">${bruteValue}</td>${yn(bruteAnswerYes)}<td class="cmp-val">${bruteOps.toLocaleString()} subsets</td>${correctness(bruteValue, true)}</tr>`
+    : `<tr><td class="cmp-algo">Brute-Force</td><td class="cmp-val">—</td><td class="cmp-val">—</td><td class="cmp-val">skipped (n > 22)</td><td class="cmp-val">—</td></tr>`;
+  rows += `<tr><td class="cmp-algo">DP</td><td class="cmp-val">${dpValue}</td>${yn(dpAnswerYes)}<td class="cmp-val">${dpOps.toLocaleString()} cells</td>${correctness(dpValue, true)}</tr>`;
+  rows += `<tr><td class="cmp-algo">Greedy</td><td class="cmp-val">${greedyValue}</td>${yn(greedyAnswerYes)}<td class="cmp-val">${greedyOps} items</td>${correctness(greedyValue, false)}</tr>`;
+
+  const note = (greedyValue !== dpValue)
+    ? `<div class="cmp-note warn">⚠ Greedy disagrees with DP on this input — greedy got ${greedyValue}, DP got ${dpValue}. This is a counterexample showing greedy is not always correct for 0/1 Knapsack.</div>`
+    : `<div class="cmp-note">Greedy happens to be correct on this input. Try the "Greedy fails (3 items)" preset to see one where it isn't.</div>`;
+
+  wrap.innerHTML =
+    `<table class="cmp-table">
+      <thead><tr><th>Algorithm</th><th>Max value</th><th>Decision (v ≥ V?)</th><th>Operations</th><th>Correct?</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>${note}`;
+}
+ 
 
 /* ======================================================================
    RENDERING — GREEDY
@@ -6086,6 +6331,8 @@ document.querySelectorAll('.algo-btn').forEach(btn => {
       loadAlgoDefault(state.algo);
       // We just overwrote the inputs, so any reduction-origin claim is stale.
       clearReductionOrigin();
+      updateComparisonPanel();
+      
     }
     resetPlayback();
     // Preview pseudocode for this algorithm (before Build is clicked).
@@ -6142,6 +6389,7 @@ document.querySelectorAll('.preset-btn').forEach(btn => {
     if (typeof syncGrowthChartToInput === 'function') syncGrowthChartToInput();
     // This is a named preset, not a reduction output — clear that banner.
     clearReductionOrigin();
+    updateComparisonPanel();
   });
 });
 
@@ -6159,6 +6407,7 @@ initReduction();
 
 // Initial growth curve chart
 initGrowthChart();
+updateComparisonPanel();
 
 /* ======================================================================
    PAGE TAB NAVIGATION
@@ -6220,6 +6469,7 @@ switchPage(window.location.hash.slice(1) || 'np');
     syncGrowthChartToInput();
     // Manual edits break the "came from reduction" guarantee — clear the banner.
     clearReductionOrigin();
+    updateComparisonPanel();
   });
 });
 
@@ -6315,6 +6565,7 @@ $('btn-build').addEventListener('click', () => {
 
   // Build the step history table for the new trace.
   renderHistory();
+  updateComparisonPanel();
 });
 
 function showError(msg) {
