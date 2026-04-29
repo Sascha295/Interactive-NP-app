@@ -6369,7 +6369,7 @@ $('speed').addEventListener('input', (e) => {
 /* Presets */
 const presets = {
   greedyfails: { items: '10,60; 20,100; 30,120',                                        W: 50, V: 220 },
-  small:       { items: '2,3; 3,4; 4,5; 5,6',                                           W: 10, V: 10  },
+  small:       { items: '2,10; 3,9; 5,8',                                           W: 10, V: 10  },
   bruteworst:  { items: Array.from({length:20},(_,i)=>`${i+1},${(i+1)*2}`).join('; '),  W: 50, V: 100 },
 };
 document.querySelectorAll('.preset-btn').forEach(btn => {
